@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: library-management
+
+  profiles:
+    active: dev
+
+  mvc:
+    problemdetails:
+      enabled: true
+
+server:
+  port: 9990
+  shutdown: graceful
+
+spring.lifecycle:
+  timeout-per-shutdown-phase: 30s
+
+app:
+  company-name: Shoaib Suad Technology
+  version: 1.0.0
+  support-email: support.shoaibsuad@gmail.com
+
+logging:
+  level:
+    root: INFO
+    org.springframework: INFO

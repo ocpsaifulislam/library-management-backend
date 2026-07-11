@@ -1,0 +1,31 @@
+spring:
+  # Database connection
+  datasource:
+    url: jdbc:oracle:thin:@//192.168.0.107:1521/librarypdb
+    username: lms
+    password: lms
+    driver-class-name: oracle.jdbc.OracleDriver
+
+  # JPA related configurations
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    open-in-view: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.OracleDialect
+        format_sql: true
+
+  flyway:
+    enabled: false
+    baseline-on-migrate: false
+    validate-on-migrate: false
+    locations:
+      - classpath:db/migration
+
+# Logging Configuration
+logging:
+  level:
+    org.hibernate.SQL: DEBUG
+    org.hibernate.orm.jdbc.bind: TRACE
