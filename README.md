@@ -1,86 +1,112 @@
 # Library Management System
 
-A production-ready Library Management System built with Spring Boot, Oracle Database, Flyway, Spring Security, MapStruct, and Gradle.
+A production-ready **Library Management System** built with **Spring Boot**, **Oracle Database**, **Spring Security**, **Flyway**, **MapStruct**, and **Gradle** following modern backend development best practices.
 
 ---
 
-# Read Me First
+## Technology Stack
 
-The following was discovered as part of building this project:
+| Technology                     | Version   |
+|--------------------------------|-----------|
+| Java                           | 25        |
+| Spring Boot                    | 4.1.0     |
+| Gradle                         | Latest    |
+| Oracle Database                | 19c / 21c |
+| Spring Data JPA                | ✓         |
+| Spring Security                | ✓         |
+| Flyway                         | ✓         |
+| Springdoc OpenAPI (Swagger UI) | 2.x       |
+| MapStruct                      | 1.6.3     |
+| Lombok                         | ✓         |
+| HikariCP                       | ✓         |
 
-- The original package name `dev.shoaibsuad.library-management` is invalid because Java package names cannot contain hyphens (`-`).
-- This project uses the valid package name:
+---
+
+## Features
+
+- User Authentication & Authorization
+- RESTful APIs
+- Spring Security Integration
+- Oracle Database Integration
+- Database Versioning with Flyway
+- Interactive API Documentation (Swagger UI)
+- DTO Mapping using MapStruct
+- Bean Validation
+- Global Exception Handling
+- Connection Pooling with HikariCP
+- Environment-based Configuration
+- Clean Layered Architecture
+
+---
+
+## Project Structure
 
 ```text
-dev.shoaibsuad.library_management
+src
+└── main
+    ├── java
+    │   └── dev.shoaibsuad.library_management
+    │       ├── auth
+    │       │   ├── controller
+    │       │   ├── service
+    │       │   ├── repository
+    │       │   ├── entity
+    │       │   ├── dto
+    │       │   ├── mapper
+    │       │   └── config
+    │       │
+    │       ├── author
+    │       ├── book
+    │       ├── category
+    │       ├── borrow
+    │       ├── reservation
+    │       │
+    │       ├── common
+    │       │   ├── config
+    │       │   ├── constant
+    │       │   ├── exception
+    │       │   ├── security
+    │       │   └── util
+    │       │
+    │       └── LibraryManagementApplication
+    │
+    └── resources
+        ├── db
+        │   └── migration
+        ├── application.yml
+        ├── application-dev.yml
+        └── application-prod.yml
 ```
 
 ---
 
-# Technology Stack
+## Prerequisites
 
-| Technology | Version |
-|------------|---------|
-| Java | 25 |
-| Spring Boot | 4.1.0 |
-| Gradle | Latest |
-| Oracle Database | 19c / 21c |
-| Spring Security | ✓ |
-| Spring Data JPA | ✓ |
-| Flyway | ✓ |
-| MapStruct | 1.6.3 |
-| Lombok | ✓ |
-| HikariCP | ✓ |
+Before running the project, ensure the following software is installed:
+
+- Java 25
+- Gradle
+- Oracle Database 19c or later
+- Git
 
 ---
 
-# Project Structure
+## Getting Started
 
-```text
-dev.shoaibsuad.library_management
-│
-├── auth
-│   ├── controller
-│   ├── service
-│   ├── repository
-│   ├── entity
-│   ├── mapper
-│   ├── dto
-│   └── config
-│
-├── book
-├── author
-├── category
-├── borrow
-├── reservation
-│
-├── common
-│   ├── config
-│   ├── exception
-│   ├── security
-│   ├── util
-│   └── constant
-│
-└── LibraryManagementApplication
-```
-
----
-
-# Getting Started
-
-## Clone Repository
+### Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/ocpsaifulislam/library-management-backend.git
+cd library-management-backend
 ```
 
-## Build
+### Build the Project
 
 ```bash
 ./gradlew clean build
 ```
 
-## Run
+### Run the Application
 
 ```bash
 ./gradlew bootRun
@@ -88,14 +114,34 @@ git clone <repository-url>
 
 ---
 
-# Profiles
+## Configuration
 
-| Profile | Description |
-|----------|-------------|
-| dev | Development Environment |
-| prod | Production Environment |
+Configure your Oracle database connection in:
 
-Default profile:
+```text
+src/main/resources/application-dev.yml
+```
+
+Example:
+
+```yaml
+spring:
+  datasource:
+    url: jdbc:oracle:thin:@//localhost:1521/librarypdb
+    username: lms
+    password: lms
+```
+
+---
+
+## Active Profiles
+
+| Profile | Description             |
+|---------|-------------------------|
+| dev     | Development Environment |
+| prod    | Production Environment  |
+
+Default:
 
 ```yaml
 spring:
@@ -105,27 +151,19 @@ spring:
 
 ---
 
-# Database
+## Database Migration
 
-Oracle Database
+Flyway manages all database schema changes.
 
-```
-jdbc:oracle:thin:@//host:1521/librarypdb
-```
+Migration directory:
 
----
-
-# Flyway
-
-Migration scripts location
-
-```
+```text
 src/main/resources/db/migration
 ```
 
-Example
+Example:
 
-```
+```text
 V1__initial_schema.sql
 V2__create_user_table.sql
 V3__insert_default_roles.sql
@@ -133,24 +171,89 @@ V3__insert_default_roles.sql
 
 ---
 
-# Reference Documentation
+## API Documentation
 
-For further reference, please consider the following sections:
+Swagger UI is available after starting the application.
 
-- Official Gradle documentation
-- Spring Boot Gradle Plugin Reference Guide
-- Create an OCI Image
+| Service      | URL                                         |
+|--------------|---------------------------------------------|
+| Swagger UI   | http://localhost:9990/swagger-ui/index.html |
+| OpenAPI JSON | http://localhost:9990/v3/api-docs           |
 
----
-
-# Additional Links
-
-- Gradle Build Scans – insights for your project's build
+> Replace the port if your application is configured differently.
 
 ---
 
-# Author
+## Build Commands
 
-**Shoaib Suad**
+```bash
+./gradlew clean
+./gradlew build
+./gradlew test
+./gradlew bootRun
+```
 
-Library Management System
+---
+
+## Architecture
+
+This project follows a layered architecture:
+
+```text
+Controller
+     │
+Service
+     │
+Repository
+     │
+Oracle Database
+```
+
+Additional components:
+
+- DTO
+- Mapper (MapStruct)
+- Security
+- Validation
+- Exception Handling
+- Flyway Migration
+
+---
+
+## Package Naming
+
+Java package names cannot contain hyphens (`-`).
+
+This project uses the following valid package structure:
+
+```text
+dev.shoaibsuad.library_management
+```
+
+---
+
+## Contributing
+
+Contributions are welcome.
+
+1. Fork the repository.
+2. Create a feature branch.
+3. Commit your changes.
+4. Push your branch.
+5. Open a Pull Request.
+
+---
+
+## License
+
+This project is licensed under the MIT License.
+
+---
+
+## Author
+
+**Saiful Islam**
+
+Software Engineer
+
+GitHub: https://github.com/ocpsaifulislam
