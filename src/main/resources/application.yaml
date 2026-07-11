@@ -21,6 +21,10 @@ app:
   version: 1.0.0
   support-email: support.shoaibsuad@gmail.com
 
+springdoc:
+  api-docs: { enabled: true }
+  swagger-ui: { enabled: true }
+
 logging:
   level:
     root: INFO
