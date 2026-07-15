@@ -20,7 +20,11 @@ app:
   company-name: Shoaib Suad Technology
   version: 1.0.0
   support-email: support.shoaibsuad@gmail.com
-
+  cors:
+    allowed-origins:
+      - http://localhost:9991
+      - http://localhost:4200
+      -
 springdoc:
   api-docs: { enabled: true }
   swagger-ui: { enabled: true }
