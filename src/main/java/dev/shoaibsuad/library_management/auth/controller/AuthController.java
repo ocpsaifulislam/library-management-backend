@@ -1,6 +1,8 @@
 package dev.shoaibsuad.library_management.auth.controller;
 
+import dev.shoaibsuad.library_management.auth.dto.request.LoginRequest;
 import dev.shoaibsuad.library_management.auth.dto.request.RegisterRequest;
+import dev.shoaibsuad.library_management.auth.dto.response.AuthResponse;
 import dev.shoaibsuad.library_management.auth.dto.response.UserResponse;
 import dev.shoaibsuad.library_management.auth.service.AuthService;
 import dev.shoaibsuad.library_management.common.constants.ApiEndpoints;
@@ -12,6 +14,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j
 @RestController
 @RequestMapping(ApiEndpoints.Auth.BASE_AUTH)
 @RequiredArgsConstructor
@@ -41,10 +46,10 @@ public class AuthController {
                                     name = "Register user",
                                     value = """
                                             {
-                                              "firstName": "Pial",
-                                              "lastName": "Samadder",
-                                              "username": "pial",
-                                              "email": "pial@example.com",
+                                              "firstName": "Saiful",
+                                              "lastName": "Islam",
+                                              "username": "Saiful",
+                                              "email": "saiful@example.com",
                                               "phoneNumber": "+8801700000000",
                                               "password": "StrongPass123"
                                             }
@@ -74,8 +79,58 @@ public class AuthController {
             }
     )
     @PostMapping("/register")
-    public ResponseEntity<ApiResponse<UserResponse>> register(@Valid @RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(ApiResponse.success("User registered successfully", authService.register(request)));
+    public ResponseEntity<ApiResponse<UserResponse>> register(
+            @Valid @RequestBody RegisterRequest request) {
+
+        UserResponse userResponse = authService.register(request);
+        log.info("REGISTER REQUEST: {}", request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success(
+                        HttpStatus.CREATED.value(),
+                        "User registered successfully",
+                        userResponse
+                ));
+    }
+
+    @Operation(
+            summary = "Login user",
+            description = "Authenticates a user by username and password, then issues access and refresh tokens.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    required = true,
+                    description = "Login payload containing username and password.",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = LoginRequest.class),
+                            examples = @ExampleObject(
+                                    name = "Login user",
+                                    value = """
+                                            {
+                                              "username": "ocpsaifulislam",
+                                              "password": "StrongPass123"
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "200",
+                            description = "User authenticated successfully",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = AuthResponse.class)
+                            )
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "401",
+                            description = "Invalid username or password",
+                            content = @Content
+                    )
+            }
+    )
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(),"Login successful", authService.login(request)));
     }
 
 }

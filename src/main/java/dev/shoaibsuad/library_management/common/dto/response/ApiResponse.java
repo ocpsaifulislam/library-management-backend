@@ -1,75 +1,42 @@
 package dev.shoaibsuad.library_management.common.dto.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.*;
 
-import java.time.Instant;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
-
-    private Instant timestamp;
+    private LocalDateTime  timestamp;
     private boolean success;
     private int status;
     private String message;
-    private T data;
-    private String path;
+    private T body;
+    private T header;
     private String details;
-    private Object header;
+    private String instance;
 
-
-    public static <T> ApiResponse<T> success(T data) {
-        return ApiResponse.<T>builder()
-                .timestamp(Instant.now())
-                .success(true)
-                .status(200)
-                .message("Operation successful")
-                .data(data)
-                .build();
+    public static <T> ApiResponse<T> success(int status,T body) {
+        return new ApiResponse<>(LocalDateTime.now(),true,status, "Operation successful", body,null,null,null);
     }
 
-
-    public static <T> ApiResponse<T> success(String message) {
-        return ApiResponse.<T>builder()
-                .timestamp(Instant.now())
-                .success(true)
-                .status(200)
-                .message(message)
-                .header(null)
-                .build();
+    public static <T> ApiResponse<T> success(int status,String message) {
+        return new ApiResponse<>(LocalDateTime.now(),true,status, message, null,null,null,null);
     }
 
-
-    public static <T> ApiResponse<T> success(String message, T data) {
-        return ApiResponse.<T>builder()
-                .timestamp(Instant.now())
-                .success(true)
-                .status(200)
-                .message(message)
-                .data(data)
-                .header(null)
-                .build();
+    public static <T> ApiResponse<T> success(int status,String message, T body) {
+        return new ApiResponse<>(LocalDateTime.now(),true,status, message, body,null,null,null);
     }
 
-
-    public static <T> ApiResponse<T> error(
-            int status,
-            String message,
-            String details) {
-
-        return ApiResponse.<T>builder()
-                .timestamp(Instant.now())
-                .success(false)
-                .status(status)
-                .message(message)
-                .details(details)
-                .data(null)
-                .header(null)
-                .build();
+    public static <T> ApiResponse<T> error(int status,String message) {
+        return new ApiResponse<>(LocalDateTime.now(),false, status,message,null, null,null,null);
     }
 }

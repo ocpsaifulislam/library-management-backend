@@ -9,20 +9,13 @@ spring:
   # JPA related configurations
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: none
     show-sql: true
     open-in-view: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
-
-  flyway:
-    enabled: false
-    baseline-on-migrate: false
-    validate-on-migrate: false
-    locations:
-      - classpath:db/migration
 
 # Logging Configuration
 logging:
