@@ -95,56 +95,56 @@ public class AuthServiceImpl  implements AuthService {
         return authResponse(accessToken, refreshToken);
     }
 
-//    @Override
-//    @Transactional
-//    public AuthResponse refresh(RefreshTokenRequest request) {
-//        RefreshToken refreshToken = getValidRefreshToken(request.refreshToken());
-//        refreshToken.setRevoked(Boolean.TRUE);
-//        refreshTokenRepository.save(refreshToken);
-//
-//        User user = refreshToken.getUser();
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-//        String accessToken = jwtService.generateAccessToken(userDetails);
-//        String newRefreshToken = createRefreshToken(user);
-//        return authResponse(accessToken, newRefreshToken);
-//    }
-//
-//    @Override
-//    @Transactional
-//    public void logout(String bearerToken, RefreshTokenRequest request) {
-//        String accessToken = extractBearerToken(bearerToken);
-//        Duration ttl;
-//        try {
-//            ttl = jwtService.getRemainingLifetime(accessToken);
-//        } catch (RuntimeException exception) {
-//            throw new InvalidTokenException("Access token is invalid.");
-//        }
-//        tokenBlacklistService.blacklist(accessToken, ttl);
-//
-//        RefreshToken refreshToken = refreshTokenRepository.findByTokenHash(TokenHashUtil.sha256(request.refreshToken()))
-//                .orElseThrow(() -> new InvalidTokenException("Refresh token is invalid."));
-//        refreshToken.setRevoked(Boolean.TRUE);
-//        refreshTokenRepository.save(refreshToken);
-//    }
-//
-//    private RefreshToken getValidRefreshToken(String rawToken) {
-//        RefreshToken refreshToken = refreshTokenRepository.findByTokenHash(TokenHashUtil.sha256(rawToken))
-//                .orElseThrow(() -> new InvalidTokenException("Refresh token is invalid."));
-//
-//        if (Boolean.TRUE.equals(refreshToken.getRevoked())) {
-//            throw new InvalidTokenException("Refresh token has been revoked.");
-//        }
-//        if (refreshToken.getExpiresAt().isBefore(LocalDateTime.now())) {
-//            refreshToken.setRevoked(Boolean.TRUE);
-//            refreshTokenRepository.save(refreshToken);
-//            throw new InvalidTokenException("Refresh token has expired.");
-//        }
-//        if (!Boolean.TRUE.equals(refreshToken.getUser().getIsActive())) {
-//            throw new InvalidTokenException("User account is inactive.");
-//        }
-//
-//        return refreshToken;
-//    }
+    @Override
+    @Transactional
+    public AuthResponse refresh(RefreshTokenRequest request) {
+        RefreshToken refreshToken = getValidRefreshToken(request.refreshToken());
+        refreshToken.setRevoked(Boolean.TRUE);
+        refreshTokenRepository.save(refreshToken);
+
+        User user = refreshToken.getUser();
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+        String accessToken = jwtService.generateAccessToken(userDetails);
+        String newRefreshToken = createRefreshToken(user);
+        return authResponse(accessToken, newRefreshToken);
+    }
+
+    @Override
+    @Transactional
+    public void logout(String bearerToken, RefreshTokenRequest request) {
+        String accessToken = extractBearerToken(bearerToken);
+        Duration ttl;
+        try {
+            ttl = jwtService.getRemainingLifetime(accessToken);
+        } catch (RuntimeException exception) {
+            throw new InvalidTokenException("Access token is invalid.");
+        }
+        tokenBlacklistService.blacklist(accessToken, ttl);
+
+        RefreshToken refreshToken = refreshTokenRepository.findByTokenHash(TokenHashUtil.sha256(request.refreshToken()))
+                .orElseThrow(() -> new InvalidTokenException("Refresh token is invalid."));
+        refreshToken.setRevoked(Boolean.TRUE);
+        refreshTokenRepository.save(refreshToken);
+    }
+
+    private RefreshToken getValidRefreshToken(String rawToken) {
+        RefreshToken refreshToken = refreshTokenRepository.findByTokenHash(TokenHashUtil.sha256(rawToken))
+                .orElseThrow(() -> new InvalidTokenException("Refresh token is invalid."));
+
+        if (Boolean.TRUE.equals(refreshToken.getRevoked())) {
+            throw new InvalidTokenException("Refresh token has been revoked.");
+        }
+        if (refreshToken.getExpiresAt().isBefore(LocalDateTime.now())) {
+            refreshToken.setRevoked(Boolean.TRUE);
+            refreshTokenRepository.save(refreshToken);
+            throw new InvalidTokenException("Refresh token has expired.");
+        }
+        if (!Boolean.TRUE.equals(refreshToken.getUser().getIsActive())) {
+            throw new InvalidTokenException("User account is inactive.");
+        }
+
+        return refreshToken;
+    }
 
     private String createRefreshToken(User user) {
         String rawToken = generateSecureToken();
@@ -171,10 +171,10 @@ public class AuthServiceImpl  implements AuthService {
         return Base64.getUrlEncoder().withoutPadding().encodeToString(tokenBytes);
     }
 
-//    private String extractBearerToken(String bearerToken) {
-//        if (bearerToken == null || !bearerToken.startsWith(BEARER_PREFIX)) {
-//            throw new InvalidTokenException("Bearer access token is required.");
-//        }
-//        return bearerToken.substring(BEARER_PREFIX.length());
-//    }
+    private String extractBearerToken(String bearerToken) {
+        if (bearerToken == null || !bearerToken.startsWith(BEARER_PREFIX)) {
+            throw new InvalidTokenException("Bearer access token is required.");
+        }
+        return bearerToken.substring(BEARER_PREFIX.length());
+    }
 }
