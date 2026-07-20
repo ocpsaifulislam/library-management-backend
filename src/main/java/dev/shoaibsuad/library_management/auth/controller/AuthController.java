@@ -138,7 +138,7 @@ public class AuthController {
             @RequestHeader(name = "Authorization") String authorization,
             @Valid @RequestBody RefreshTokenRequest request) {
         authService.logout(authorization, request);
-        return ResponseEntity.ok(ApiResponse.<Void>success(HttpStatus.OK.value(),"Logout successful"));
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(),"Logout successful"));
     }
 
 }
