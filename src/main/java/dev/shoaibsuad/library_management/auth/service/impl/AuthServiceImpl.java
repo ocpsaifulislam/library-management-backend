@@ -105,12 +105,19 @@ public class AuthServiceImpl  implements AuthService {
         return authResponse(accessToken, refreshToken);
     }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> f55f6af592f02c5fcf01479bee89b5ee1d2255a5
     @Override
     @Transactional
     public AuthResponse refresh(RefreshTokenRequest request) {
         RefreshToken refreshToken = getValidRefreshToken(request.refreshToken());
+<<<<<<< HEAD
         refreshToken.setRevoked(1L);
+=======
+        refreshToken.setRevoked(Boolean.TRUE);
+>>>>>>> f55f6af592f02c5fcf01479bee89b5ee1d2255a5
         refreshTokenRepository.save(refreshToken);
 
         User user = refreshToken.getUser();
@@ -134,7 +141,11 @@ public class AuthServiceImpl  implements AuthService {
 
         RefreshToken refreshToken = refreshTokenRepository.findByTokenHash(TokenHashUtil.sha256(request.refreshToken()))
                 .orElseThrow(() -> new InvalidTokenException("Refresh token is invalid."));
+<<<<<<< HEAD
         refreshToken.setRevoked(1L);
+=======
+        refreshToken.setRevoked(Boolean.TRUE);
+>>>>>>> f55f6af592f02c5fcf01479bee89b5ee1d2255a5
         refreshTokenRepository.save(refreshToken);
     }
 
@@ -146,7 +157,11 @@ public class AuthServiceImpl  implements AuthService {
             throw new InvalidTokenException("Refresh token has been revoked.");
         }
         if (refreshToken.getExpiresAt().isBefore(LocalDateTime.now())) {
+<<<<<<< HEAD
             refreshToken.setRevoked(1L);
+=======
+            refreshToken.setRevoked(Boolean.TRUE);
+>>>>>>> f55f6af592f02c5fcf01479bee89b5ee1d2255a5
             refreshTokenRepository.save(refreshToken);
             throw new InvalidTokenException("Refresh token has expired.");
         }
