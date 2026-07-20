@@ -1,6 +1,7 @@
 package dev.shoaibsuad.library_management.auth.controller;
 
 import dev.shoaibsuad.library_management.auth.dto.request.LoginRequest;
+import dev.shoaibsuad.library_management.auth.dto.request.RefreshTokenRequest;
 import dev.shoaibsuad.library_management.auth.dto.request.RegisterRequest;
 import dev.shoaibsuad.library_management.auth.dto.response.AuthResponse;
 import dev.shoaibsuad.library_management.auth.dto.response.UserResponse;
@@ -8,6 +9,7 @@ import dev.shoaibsuad.library_management.auth.service.AuthService;
 import dev.shoaibsuad.library_management.common.constants.ApiEndpoints;
 import dev.shoaibsuad.library_management.common.dto.response.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -18,10 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -131,6 +130,15 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(),"Login successful", authService.login(request)));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<ApiResponse<Void>> logout(
+            @Parameter(description = "Bearer access token.", required = true)
+            @RequestHeader(name = "Authorization") String authorization,
+            @Valid @RequestBody RefreshTokenRequest request) {
+        authService.logout(authorization, request);
+        return ResponseEntity.ok(ApiResponse.<Void>success(HttpStatus.OK.value(),"Logout successful"));
     }
 
 }

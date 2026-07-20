@@ -50,7 +50,7 @@ public class SecurityConfig {
 //                        .requestMatchers(HttpMethod.GET, "/api/v1/products/**").permitAll()
 //                        .requestMatchers(HttpMethod.GET, "/api/v1/categories/**").permitAll()
 //                        .requestMatchers("/api/v1/admin/**")
-//                        .hasAnyRole("ADMIN", "PRODUCT_MANAGER", "INVENTORY_MANAGER"i, "SUPPORT_AGENT")
+//                        .hasAnyRole("ADMIN", "PRODUCT_MANAGER", "INVENTORY_MANAGER", "SUPPORT_AGENT")
                         .anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

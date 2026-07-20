@@ -17,6 +17,11 @@ spring:
         dialect: org.hibernate.dialect.OracleDialect
         format_sql: true
 
+jwt:
+  signing-key: verySecretKeyForJwtSigningExample123456789verySecretKeyForJwtSigningExample123456789
+  expiration: 15m
+  refresh-expiration: 7d
+
 # Logging Configuration
 logging:
   level:

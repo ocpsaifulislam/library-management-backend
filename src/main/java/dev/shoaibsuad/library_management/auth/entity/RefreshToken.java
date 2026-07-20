@@ -14,13 +14,13 @@ import java.time.LocalDateTime;
 @Setter
 public class RefreshToken extends BaseEntity implements Auditable {
     @Id
-    @Column(name = "id", nullable = false, updatable = false)
+    @Column(name = "REFRESH_TOKENS_NO", nullable = false, updatable = false)
     private Long id;
     /**
      * User that owns this refresh token.
      */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "USER_NO", nullable = false)
     private User user;
 
     /**
@@ -38,8 +38,8 @@ public class RefreshToken extends BaseEntity implements Auditable {
     /**
      * Indicates whether this token has been explicitly revoked.
      */
-    @Column(nullable = false)
-    private Boolean revoked = false;
+    @Column(name = "revoked", nullable = false)
+    private Long revoked;
 
     /**
      * Timestamp when the refresh token was created.

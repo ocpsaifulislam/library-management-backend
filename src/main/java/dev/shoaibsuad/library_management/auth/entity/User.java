@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 public class User extends BaseEntity implements Auditable {
     @Id
-    @Column(name = "id", nullable = false, updatable = false)
+    @Column(name = "USER_NO", nullable = false, updatable = false)
     private Long id;
 
     @Column(name = "first_name", nullable = false, length = 100)
