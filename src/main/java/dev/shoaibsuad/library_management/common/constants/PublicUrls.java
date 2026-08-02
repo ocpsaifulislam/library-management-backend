@@ -12,6 +12,7 @@ public final class PublicUrls {
             ApiEndpoints.Auth.BASE_AUTH + "/register",
             ApiEndpoints.Auth.BASE_AUTH + "/login",
             ApiEndpoints.Auth.BASE_AUTH + "/refresh",
+            ApiEndpoints.Auth.BASE_AUTH + "/tree",
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/swagger-ui.html"

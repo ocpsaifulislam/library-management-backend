@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -132,6 +133,79 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(),"Login successful", authService.login(request)));
     }
 
+    @Operation(
+            summary = "Refresh token",
+            description = "Validates a persisted refresh token, revokes it, and returns a newly rotated token pair.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    required = true,
+                    description = "Refresh payload containing the refresh token.",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = RefreshTokenRequest.class),
+                            examples = @ExampleObject(
+                                    name = "Refresh token",
+                                    value = """
+                                            {
+                                              "refreshToken": "raw-refresh-token"
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "200",
+                            description = "Token refreshed successfully",
+                            content = @Content(
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = AuthResponse.class)
+                            )
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "401",
+                            description = "Refresh token is invalid, expired, or revoked",
+                            content = @Content
+                    )
+            }
+    )
+    @PostMapping("/refresh")
+    public ResponseEntity<ApiResponse<AuthResponse>> refresh(@Valid @RequestBody RefreshTokenRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(HttpStatus.OK.value(),"Token refreshed successfully", authService.refresh(request)));
+    }
+
+    @Operation(
+            summary = "Logout user",
+            description = "Revokes the submitted refresh token and blacklists the active access token.",
+            security = @SecurityRequirement(name = "bearerAuth"),
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    required = true,
+                    description = "Logout payload containing the refresh token to revoke.",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = RefreshTokenRequest.class),
+                            examples = @ExampleObject(
+                                    name = "Logout user",
+                                    value = """
+                                            {
+                                              "refreshToken": "raw-refresh-token"
+                                            }
+                                            """
+                            )
+                    )
+            ),
+            responses = {
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "200",
+                            description = "Logout successful",
+                            content = @Content
+                    ),
+                    @io.swagger.v3.oas.annotations.responses.ApiResponse(
+                            responseCode = "401",
+                            description = "Access token or refresh token is invalid",
+                            content = @Content
+                    )
+            }
+    )
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(
             @Parameter(description = "Bearer access token.", required = true)

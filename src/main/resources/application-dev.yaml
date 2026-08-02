@@ -4,6 +4,9 @@ spring:
     url: jdbc:oracle:thin:@//192.168.0.107:1521/librarypdb
     username: lms
     password: lms
+#    url: jdbc:oracle:thin:@//192.168.111.21:1521/pridedev19c
+#    username: bms
+#    password: bms
     driver-class-name: oracle.jdbc.OracleDriver
 
   # JPA related configurations
