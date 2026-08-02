@@ -102,7 +102,7 @@ public class AuthServiceImpl  implements AuthService {
         System.out.println(refreshToken);
 
         log.info("User logged in: {}", user.getUsername());
-        return authResponse(accessToken, refreshToken);
+        return authResponse(accessToken, refreshToken, user.getFirstName(), user.getLastName());
     }
 
     @Override
@@ -116,7 +116,7 @@ public class AuthServiceImpl  implements AuthService {
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
         String accessToken = jwtService.generateAccessToken(userDetails);
         String newRefreshToken = createRefreshToken(user);
-        return authResponse(accessToken, newRefreshToken);
+        return authResponse(accessToken, newRefreshToken, user.getFirstName(), user.getLastName());
     }
 
     @Override
@@ -170,12 +170,15 @@ public class AuthServiceImpl  implements AuthService {
         return rawToken;
     }
 
-    private AuthResponse authResponse(String accessToken, String refreshToken) {
+    private AuthResponse authResponse(String accessToken, String refreshToken, String firstName, String lastName) {
         return new AuthResponse(
                 accessToken,
                 refreshToken,
                 TOKEN_TYPE,
-                jwtService.getAccessTokenExpiration().toSeconds());
+                jwtService.getAccessTokenExpiration().toSeconds(),
+                firstName,
+                lastName
+        );
     }
 
     private String generateSecureToken() {

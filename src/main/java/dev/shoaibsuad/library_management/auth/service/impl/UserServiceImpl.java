@@ -5,7 +5,7 @@ import dev.shoaibsuad.library_management.auth.repository.UserRepository;
 import dev.shoaibsuad.library_management.auth.service.UserService;
 import dev.shoaibsuad.library_management.auth.security.AuthenticatedUser;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Set;
 
+@NullMarked
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -23,7 +24,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(@NonNull String username) {
+    public UserDetails loadUserByUsername( String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
